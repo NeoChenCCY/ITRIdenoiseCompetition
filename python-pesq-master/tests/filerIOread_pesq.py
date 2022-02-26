@@ -16,6 +16,7 @@ import numpy as np
 
 import scipy.io.wavfile
 import soundfile as sf     
+from scipy import signal
 
 from pathlib import Path
 
@@ -38,6 +39,17 @@ sample_rate2, deg = scipy.io.wavfile.read(deg_path)
 
 score1 = pesq(ref=ref, deg=deg, fs=sample_rate1, mode='wb')
 
+tmp = deg - ref
+
+f, t, Zxx = signal.stft(deg, sample_rate1, nperseg=1000)
+
+amp = 2 * np.sqrt(1000)
+plt.pcolormesh(t, f, np.abs(Zxx), vmin=0, vmax=None, shading='gouraud')
+plt.title('STFT Magnitude')
+plt.ylabel('Frequency [Hz]')
+plt.xlabel('Time [sec]')
+plt.show()
+
 #assert score == 1.0832337141036987, score
 
 score2 = pesq(ref=ref, deg=deg, fs=sample_rate2, mode='nb')
@@ -47,7 +59,16 @@ score2 = pesq(ref=ref, deg=deg, fs=sample_rate2, mode='nb')
 duration = len(ref)/sample_rate1
 time = np.arange(0,duration,1/sample_rate1) #time vector
 
-plt.plot(time,ref)
+plt.scatter(time,ref)
+plt.xlabel('Time [s]')
+plt.ylabel('Amplitude')
+plt.title('speech.wav')
+plt.show()
+
+duration = len(ref[3478:3500])/sample_rate1
+time = np.arange(0,duration,1/sample_rate1) #time vector
+
+plt.scatter(time,ref[3478:3500])
 plt.xlabel('Time [s]')
 plt.ylabel('Amplitude')
 plt.title('speech.wav')
