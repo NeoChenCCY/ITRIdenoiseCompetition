@@ -45,21 +45,24 @@ Zxx5 = Zxx2 - Zxx1
 diff_dr = deg - ref
 #X4, y4 = make_blobs(500, 133, centers=2, random_state=2, cluster_std=1.5)
 
-plt.scatter(deg,ref,c="red")
-plt.scatter(deg,diff_dr,c="green")
-plt.scatter(deg,deg,c="yellow")
-plt.xlabel("X")
-plt.ylabel("Y")
-plt.title("Scatter Plot of two different datasets")
-plt.show()
-
-plt.scatter(Zxx2,Zxx1,c="red")
-plt.scatter(Zxx2,Zxx5,c="green")
-plt.scatter(Zxx2,Zxx2,c="yellow")
-plt.xlabel("X")
-plt.ylabel("Y")
-plt.title("Scatter Plot of two different datasets")
-plt.show()
+# 錯誤範例 #
+# =============================================================================
+# plt.scatter(deg,ref,c="red")
+# plt.scatter(deg,diff_dr,c="green")
+# plt.scatter(deg,deg,c="yellow")
+# plt.xlabel("X")
+# plt.ylabel("Y")
+# plt.title("Scatter Plot of two different datasets")
+# plt.show()
+# 
+# plt.scatter(Zxx2,Zxx1,c="red")
+# plt.scatter(Zxx2,Zxx5,c="green")
+# plt.scatter(Zxx2,Zxx2,c="yellow")
+# plt.xlabel("X")
+# plt.ylabel("Y")
+# plt.title("Scatter Plot of two different datasets")
+# plt.show()
+# =============================================================================
 
 # build model #
 # =============================================================================
@@ -109,11 +112,11 @@ model = GaussianNB()
 
 model.fit(Zxx1.reshape(-1, 1).astype(int), Zxx1.reshape(-1, 1).astype(int));
 
-Zxx_test = deg.reshape(-1, 1).astype(float)
+Zxx_test = Zxx2.reshape(-1, 1).astype(float)
 ynew = model.predict(Zxx_test)
 
 
-plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="red")
+plt.scatter(ynew.reshape(-1, 1), Zxx1.reshape(-1, 1), c="red")
 #plt.scatter(deg,ref.reshape(-1, 1),c="red")
 #plt.scatter(ynew.reshape(-1, 1), ynew, c="yellow")
 plt.xlabel("X")
@@ -122,15 +125,15 @@ plt.title("Scatter Plot of two different datasets")
 plt.show()
 
 #plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="green")
-plt.scatter(deg,ref.reshape(-1, 1),c="green")
+plt.scatter(Zxx2,Zxx1.reshape(-1, 1),c="green")
 #plt.scatter(ynew.reshape(-1, 1), ynew, c="yellow")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.title("Scatter Plot of two different datasets")
 plt.show()
 
-tmp = deg.reshape(-1, 1) - ref.reshape(-1, 1)
-plt.scatter(tmp.reshape(-1, 1), ref.reshape(-1, 1), c="yellow")
+tmp = Zxx2.reshape(-1, 1) - Zxx1.reshape(-1, 1)
+plt.scatter(tmp.reshape(-1, 1), Zxx1.reshape(-1, 1), c="yellow")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.title("Scatter Plot of two different datasets")
@@ -147,10 +150,10 @@ plt.title("Scatter Plot of two different datasets")
 plt.show()
 """
 
-tmp = deg.reshape(-1, 1) - ref.reshape(-1, 1)
-plt.scatter(ref.reshape(-1, 1), tmp.reshape(-1, 1), c="yellow")
-plt.scatter(ref,deg.reshape(-1, 1),c="green")
-plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="red")
+tmp = Zxx2.reshape(-1, 1) - Zxx1.reshape(-1, 1)
+#plt.scatter(ref.reshape(-1, 1), tmp.reshape(-1, 1), c="yellow")
+plt.scatter(Zxx2,Zxx1.reshape(-1, 1),c="green")
+plt.scatter(ynew.reshape(-1, 1), Zxx1.reshape(-1, 1), c="red")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.title("Scatter Plot of two different datasets")
