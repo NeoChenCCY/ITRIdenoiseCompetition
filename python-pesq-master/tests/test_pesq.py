@@ -47,4 +47,3 @@ def test_no_utterances_wb_mode():
         on_error=PesqError.RETURN_VALUES)
 
     assert score == PesqError.NO_UTTERANCES_DETECTED, score
-

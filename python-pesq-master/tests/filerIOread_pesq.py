@@ -2,7 +2,7 @@
 """
 Created on Fri Feb 25 15:28:21 2022
 
-@author: Administrator
+@author: NeoChen
 
 [note]
 1. score check ok
@@ -28,14 +28,14 @@ import numpy as np
 data_dir = Path(__file__).parent.parent / 'audio'
 ref_path = data_dir / 'speech.wav'
 deg_path = data_dir / 'speech_bab_0dB.wav'
-#deg_path = data_dir / 'mixed_00006_dog_bark.wav'
-#degSAVE_path = data_dir / 'mixed_00006_dog_bark.wav'
+degIN_path = data_dir / 'vocal_01081.flac'
+degSAVE_path = data_dir / 'vocal_01081.wav'
 
 sample_rate1, ref = scipy.io.wavfile.read(ref_path)
 sample_rate2, deg = scipy.io.wavfile.read(deg_path)
 
-#deg, sample_rate = sf.read(deg_path)
-#sf.write(degSAVE_path, deg, 16000, 'PCM_24')
+deg, sample_rate = sf.read(degIN_path)
+sf.write(degSAVE_path, deg, 16000, 'PCM_24')
 
 score1 = pesq(ref=ref, deg=deg, fs=sample_rate1, mode='wb')
 
