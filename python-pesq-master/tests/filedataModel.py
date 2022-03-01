@@ -18,14 +18,19 @@ data_dir = Path(__file__).parent.parent / 'audio'
 # =============================================================================
 ref_path = data_dir / 'speech.wav'
 deg_path = data_dir / 'speech_bab_0dB.wav'
+degtest_path = data_dir / 'mixed_01081_jackhammer.wav'
 # =============================================================================
 #ref_path = data_dir / 'vocal_01081.wav'
 #deg_path = data_dir / 'mixed_01081_jackhammer.wav'
 sample_rate1, ref = scipy.io.wavfile.read(ref_path)
 sample_rate2, deg = scipy.io.wavfile.read(deg_path)
 
+sample_rate3, degtest = scipy.io.wavfile.read(degtest_path)
+
 f1, t1, Zxx1 = signal.stft(ref, sample_rate1, nperseg=1000)
 f2, t2, Zxx2 = signal.stft(deg, sample_rate2, nperseg=1000)
+
+f3, t3, Zxx3 = signal.stft(degtest, sample_rate2, nperseg=1000)
 
 # plot voice data #
 # =============================================================================
@@ -36,21 +41,21 @@ f2, t2, Zxx2 = signal.stft(deg, sample_rate2, nperseg=1000)
 # plt.title("Scatter Plot of two different datasets")
 # plt.show()
 # =============================================================================
-Zxx3 = Zxx2 - Zxx1
+Zxx5 = Zxx2 - Zxx1
 diff_dr = deg - ref
-X4, y4 = make_blobs(500, 133, centers=2, random_state=2, cluster_std=1.5)
+#X4, y4 = make_blobs(500, 133, centers=2, random_state=2, cluster_std=1.5)
 
 plt.scatter(deg,ref,c="red")
 plt.scatter(deg,diff_dr,c="green")
-plt.scatter(X4,X4,c="yellow")
+plt.scatter(deg,deg,c="yellow")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.title("Scatter Plot of two different datasets")
 plt.show()
 
 plt.scatter(Zxx2,Zxx1,c="red")
-plt.scatter(Zxx2,Zxx3,c="green")
-plt.scatter(X4,X4,c="yellow")
+plt.scatter(Zxx2,Zxx5,c="green")
+plt.scatter(Zxx2,Zxx2,c="yellow")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.title("Scatter Plot of two different datasets")
@@ -70,9 +75,26 @@ plt.show()
 # Xnew = [-6, -14] + [14, 18] * rng.rand(2000, 2)
 # ynew = model.predict(Xnew)
 # 
+# 轉換型別
+# Xs_new = np.dot(Xs, A_coral).astype(float)
+#
 # plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='RdBu')
 # lim = plt.axis()
 # plt.scatter(Xnew[:, 0], Xnew[:, 1], c=ynew, s=20, cmap='RdBu', alpha=0.1)
 # plt.axis(lim);
 # =============================================================================
+from sklearn.naive_bayes import GaussianNB
 
+model = GaussianNB()
+model.fit(Zxx2.reshape(-1, 1).astype(float), Zxx1.reshape(-1, 1).astype(int));
+
+ynew = model.predict(Zxx3.reshape(-1, 1).astype(float))
+
+plt.scatter(ynew,Zxx1.reshape(-1, 1).astype(float),c="red")
+#plt.scatter(ynew,diff_dr,c="green")
+plt.scatter(ynew,ynew,c="yellow")
+plt.scatter(ynew,Zxx2.reshape(-1, 1).astype(float),c="yellow")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
