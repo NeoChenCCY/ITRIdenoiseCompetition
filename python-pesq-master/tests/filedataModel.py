@@ -151,11 +151,12 @@ plt.show()
 """
 
 tmp = Zxx2.reshape(-1, 1) - Zxx1.reshape(-1, 1)
-#plt.scatter(ref.reshape(-1, 1), tmp.reshape(-1, 1), c="yellow")
+plt.scatter(Zxx1.reshape(-1, 1), tmp.reshape(-1, 1), c="yellow")
 plt.scatter(Zxx2,Zxx1.reshape(-1, 1),c="green")
 plt.scatter(ynew.reshape(-1, 1), Zxx1.reshape(-1, 1), c="red")
-plt.xlabel("X")
-plt.ylabel("Y")
+plt.scatter(Zxx1.reshape(-1, 1), Zxx1.reshape(-1, 1), c="blue")
+plt.xlabel("X Data")
+plt.ylabel("Y Data Value of Label")
 plt.title("Scatter Plot of two different datasets")
 plt.show()
 
