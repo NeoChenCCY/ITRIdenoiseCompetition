@@ -39,7 +39,7 @@ sf.write(degSAVE_path, deg, 16000, 'PCM_24')
 
 score1 = pesq(ref=ref, deg=deg, fs=sample_rate1, mode='wb')
 
-tmp = deg - ref
+#tmp = deg - ref
 
 f, t, Zxx = signal.stft(deg, sample_rate1, nperseg=1000)
 
