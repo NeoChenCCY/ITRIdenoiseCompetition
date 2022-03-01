@@ -83,18 +83,110 @@ plt.show()
 # plt.scatter(Xnew[:, 0], Xnew[:, 1], c=ynew, s=20, cmap='RdBu', alpha=0.1)
 # plt.axis(lim);
 # =============================================================================
+"""
 from sklearn.naive_bayes import GaussianNB
 
 model = GaussianNB()
+
+Zxx_train = Zxx2.reshape(-1, 1)[0:int(len(Zxx2.reshape(-1, 1))*0.80)].astype(float)
 model.fit(Zxx2.reshape(-1, 1).astype(float), Zxx1.reshape(-1, 1).astype(int));
+Zxx_test = Zxx2.reshape(-1, 1)[int(len(Zxx2.reshape(-1, 1))*0.80):len(Zxx2.reshape(-1, 1))].astype(float)
+ynew = model.predict(Zxx_test)
 
-ynew = model.predict(Zxx3.reshape(-1, 1).astype(float))
-
-plt.scatter(ynew,Zxx1.reshape(-1, 1).astype(float),c="red")
+plt.scatter(ynew.reshape(-1, 1),None,c="red")
 #plt.scatter(ynew,diff_dr,c="green")
-plt.scatter(ynew,ynew,c="yellow")
-plt.scatter(ynew,Zxx2.reshape(-1, 1).astype(float),c="yellow")
+plt.scatter(ynew.reshape(-1, 1),ynew,c="yellow")
+#plt.scatter(ynew.reshape(-1, 1),Zxx2.reshape(-1, 1)[int(len(Zxx2.reshape(-1, 1))*0.80):len(Zxx2.reshape(-1, 1))].astype(float),c="yellow")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.title("Scatter Plot of two different datasets")
 plt.show()
+"""
+
+from sklearn.naive_bayes import GaussianNB
+
+model = GaussianNB()
+
+model.fit(Zxx1.reshape(-1, 1).astype(int), Zxx1.reshape(-1, 1).astype(int));
+
+Zxx_test = deg.reshape(-1, 1).astype(float)
+ynew = model.predict(Zxx_test)
+
+
+plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="red")
+#plt.scatter(deg,ref.reshape(-1, 1),c="red")
+#plt.scatter(ynew.reshape(-1, 1), ynew, c="yellow")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+
+#plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="green")
+plt.scatter(deg,ref.reshape(-1, 1),c="green")
+#plt.scatter(ynew.reshape(-1, 1), ynew, c="yellow")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+
+tmp = deg.reshape(-1, 1) - ref.reshape(-1, 1)
+plt.scatter(tmp.reshape(-1, 1), ref.reshape(-1, 1), c="yellow")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+
+"""
+tmp = deg.reshape(-1, 1) - ref.reshape(-1, 1)
+plt.scatter(tmp.reshape(-1, 1), ref.reshape(-1, 1), c="yellow")
+plt.scatter(deg,ref.reshape(-1, 1),c="green")
+plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="red")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+"""
+
+tmp = deg.reshape(-1, 1) - ref.reshape(-1, 1)
+plt.scatter(ref.reshape(-1, 1), tmp.reshape(-1, 1), c="yellow")
+plt.scatter(ref,deg.reshape(-1, 1),c="green")
+plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="red")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+
+"""
+model = GaussianNB()
+
+model.fit(Zxx2.reshape(-1, 1).astype(float), Zxx2.reshape(-1, 1).astype(int));
+
+Zxx_test = Zxx1.reshape(-1, 1).astype(float)
+ynew = model.predict(Zxx_test)
+
+
+plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="red")
+#plt.scatter(deg,ref.reshape(-1, 1),c="red")
+#plt.scatter(ynew.reshape(-1, 1), ynew, c="yellow")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+
+#plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="green")
+plt.scatter(deg,ref.reshape(-1, 1),c="green")
+#plt.scatter(ynew.reshape(-1, 1), ynew, c="yellow")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+
+
+plt.scatter(deg,ref.reshape(-1, 1),c="green")
+plt.scatter(ynew.reshape(-1, 1), ref.reshape(-1, 1), c="red")
+#plt.scatter(ynew.reshape(-1, 1), ynew, c="yellow")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Scatter Plot of two different datasets")
+plt.show()
+"""
