@@ -28,8 +28,10 @@ import numpy as np
 data_dir = Path(__file__).parent.parent / 'audio'
 ref_path = data_dir / 'speech.wav'
 deg_path = data_dir / 'speech_bab_0dB.wav'
-degIN_path = data_dir / 'vocal_01081.flac'
-degSAVE_path = data_dir / 'vocal_01081.wav'
+
+# 轉檔 flac to wav #
+degIN_path = data_dir / 'mixed_00059_fan.flac'
+degSAVE_path = data_dir / 'mixed_00059_fan.wav'
 
 sample_rate1, ref = scipy.io.wavfile.read(ref_path)
 sample_rate2, deg = scipy.io.wavfile.read(deg_path)
