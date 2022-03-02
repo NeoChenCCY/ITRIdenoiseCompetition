@@ -88,13 +88,91 @@ f3, t3, Zxx3 = signal.stft(degtest, sample_rate2, nperseg=1000)
 # =============================================================================
 
 
-from sklearn.linear_model import LinearRegression
-model = LinearRegression(fit_intercept=True)
+# =============================================================================
+# from sklearn.preprocessing import MinMaxScaler
+# scaler = MinMaxScaler(feature_range=(0, 1))# 
+# normalized_stft = scaler.transform(stft)
+# scaler.fit(stft)
+# features_convolution = np.reshape(normalized_stft,(400,1025, -1,1))
+#
+# model = Sequential()
+# 
+# model.add(Conv2D(16, (3, 3), input_shape=features_convolution.shape[1:]))
+# model.add(Activation('relu'))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+# #'''
+# #model.add(Dropout(0.2))
+# 
+# model.add(Conv2D(32, (3, 3)))
+# model.add(Activation('relu'))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+# 
+# #model.add(Dropout(0.2))
+# 
+# #'''
+# #'''
+# model.add(Conv2D(64, (3, 3),padding='same'))
+# model.add(Activation('relu'))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+# #'''
+# 
+# 
+# model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
+# 
+# #model.add(Dense(1000))#input_shape=features.shape[1:]
+# model.add(Dense(64))#input_shape=features.shape[1:]
+# 
+# model.add(Dense(10))
+# model.add(Activation('softmax'))
+# sgd = optimizers.SGD(lr=0.0000001, decay=1e-6, momentum=0.9, nesterov=True)
+# 
+# model.compile(loss='categorical_crossentropy',
+#               optimizer='adam',
+#               metrics=['accuracy'])
+# =============================================================================
+from sklearn.preprocessing import MinMaxScaler
 
-model.fit(Zxx1.reshape(-1, 1).astype(int), Zxx1.reshape(-1, 1).astype(int))
+scaler = MinMaxScaler(feature_range=(0, 1))
+scaler.fit(Zxx2.astype(float))
+normalized_stft = scaler.transform(Zxx2.astype(float))
+features_convolution = np.reshape(normalized_stft,(501,101, -1,1))
 
-xfit = Zxx2.reshape(-1, 1).astype(float)
-yfit = model.predict(xfit)
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from keras import optimizers
+import keras
 
-plt.scatter(Zxx1.reshape(-1, 1).astype(int), Zxx1.reshape(-1, 1).astype(int))
-plt.plot(xfit, yfit);
+model = Sequential()
+
+features_convolution_float = features_convolution/1000
+#model.add(Conv2D(16, (3, 3), input_shape=(features_convolution.shape[1:])))
+#model.add(Conv2D(16, (3, 3), input_shape=(features_convolution.reshape(-1,1).astype(float))))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+#'''
+model.add(Dropout(0.2))
+
+model.add(Conv2D(32, (3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Dropout(0.2))
+
+model.add(Conv2D(64, (3, 3),padding='same'))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
+
+model.add(Dense(1000))#input_shape=features.shape[1:]
+model.add(Dense(64))#input_shape=features.shape[1:]
+
+model.add(Dense(10))
+model.add(Activation('softmax'))
+#sgd = optimizers.SGD(lr=0.0000001, decay=1e-6, momentum=0.9, nesterov=True)
+
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+#y=keras.utils.to_categorical(labels, num_classes=10, dtype='float32')
+history = model.fit(features_convolution, None,batch_size=8, epochs=40,validation_split=0.2)
