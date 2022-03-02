@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 python-pesq-master/tests/tmp.wav
+python-pesq-master/audio/out.wav
+python-pesq-master/tests/out.wav
