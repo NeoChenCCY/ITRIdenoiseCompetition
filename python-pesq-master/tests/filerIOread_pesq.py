@@ -65,10 +65,10 @@ plt.ylabel('Amplitude')
 plt.title('speech.wav')
 plt.show()
 
-duration = len(ref[3478:3500])/sample_rate1
+duration = len(ref)/sample_rate1
 time = np.arange(0,duration,1/sample_rate1) #time vector
 
-plt.scatter(time,ref[3478:3500])
+plt.plot(time,ref)
 plt.xlabel('Time [s]')
 plt.ylabel('Amplitude')
 plt.title('speech.wav')
@@ -77,18 +77,29 @@ plt.show()
 duration = len(deg)/sample_rate2
 time = np.arange(0,duration,1/sample_rate2) #time vector
 
-plt.plot(time,deg)
+plt.plot(time,deg.reshape(-1, 1))
 plt.xlabel('Time [s]')
 plt.ylabel('Amplitude')
 plt.title('speech_bab_0dB.wav')
 plt.show()
 
-tmp = deg - ref
+tmp = deg.reshape(-1, 1)[16064:65664] - ref.reshape(-1, 1).astype(float)
 
 duration = len(tmp)/sample_rate2
 time = np.arange(0,duration,1/sample_rate2) #time vector
 
 plt.plot(time,tmp)
+plt.xlabel('Time [s]')
+plt.ylabel('Amplitude')
+plt.title('tmp.wav')
+plt.show()
+
+duration = len(ref)/sample_rate1
+time = np.arange(0,duration,1/sample_rate1) #time ve
+plt.plot()
+plt.plot(time,tmp,'b')
+plt.plot(time,ref,'y')
+plt.plot(time,deg.reshape(-1, 1)[16064:65664],'g')
 plt.xlabel('Time [s]')
 plt.ylabel('Amplitude')
 plt.title('tmp.wav')
