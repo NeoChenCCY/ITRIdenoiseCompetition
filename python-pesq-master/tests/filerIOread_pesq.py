@@ -29,13 +29,12 @@ data_dir = Path(__file__).parent.parent / 'audio'
 ref_path = data_dir / 'speech.wav'
 deg_path = data_dir / 'speech_bab_0dB.wav'
 
-# 轉檔 flac to wav #
-degIN_path = data_dir / 'mixed_00059_fan.flac'
-degSAVE_path = data_dir / 'mixed_00059_fan.wav'
-
 sample_rate1, ref = scipy.io.wavfile.read(ref_path)
 sample_rate2, deg = scipy.io.wavfile.read(deg_path)
 
+# 轉檔 flac to wav #
+degIN_path = data_dir / 'mixed_00059_fan.flac'
+degSAVE_path = data_dir / 'mixed_00059_fan.wav'
 deg, sample_rate = sf.read(degIN_path)
 sf.write(degSAVE_path, deg, 16000, 'PCM_24')
 
