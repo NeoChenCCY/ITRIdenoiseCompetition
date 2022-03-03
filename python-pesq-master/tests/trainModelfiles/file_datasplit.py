@@ -9,8 +9,14 @@ import os
 import numpy as np
 import shutil
 import random
-root_dir = '../classification/data/' # data root path
-classes_dir = ['good', 'bad'] #total labels
+from pathlib import Path
+
+#root_dir = '../classification/data/' # data root path
+#root_dir = Path(__file__).parent.parent / 'train/'
+root_dir = '../train/' # data root path
+classes_dir = ['mixed2wav', 'vocal2wav'] #total labels
+
+#root_dir_str = str(root_dir)
 
 val_ratio = 0.15
 test_ratio = 0.05
@@ -43,8 +49,12 @@ print('Testing: ', len(test_FileNames))
 # Copy-pasting images
 for name in train_FileNames:
     shutil.copy(name, root_dir +'train/' + cls)
-
+    print(root_dir + 'train/' + name)
+    
 for name in val_FileNames:
     shutil.copy(name, root_dir +'val/' + cls)
+    print(root_dir + 'train/' + name)
 
 for name in test_FileNames:
+    shutil.copy(name, root_dir +'test/' + cls)
+    print(root_dir + 'train/' + name)
