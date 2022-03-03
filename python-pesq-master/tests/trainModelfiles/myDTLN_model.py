@@ -44,7 +44,7 @@ class myDTLN_model():
         self.block_shift = 128
         self.dropout = 0.25
         self.lr = 1e-3
-        self.max_epochs = 200
+        self.max_epochs = 100 
         self.encoder_size = 256
         self.eps = 1e-7
         # reset all seeds to 42 to reduce invariance between training runs
@@ -288,19 +288,20 @@ class myDTLN_model():
         #return self.model
         #self.model.compile(optimizer=optimizerAdam, loss=tf.keras.losses.BinaryCrossentropy(),metrics=[tf.keras.metrics.BinaryAccuracy(),tf.keras.metrics.FalseNegatives()], run_eagerly=False)
         
-        
+        # => 最終BUG在此，RUN第二次就掛掉。因為不明參數太多 #
         self.model.fit(
             x=dataset, 
-            batch_size=None,
-            steps_per_epoch=steps_train, 
+            batch_size=3,
+            #steps_per_epoch=steps_train, 
             epochs=self.max_epochs,
-            verbose=1,
-            validation_data=dataset_val,
+            #verbose=1,
+            #validation_data=dataset_val,
             validation_steps=steps_val, 
             #callbacks=[checkpointer, reduce_lr, csv_logger, early_stopping],
-            max_queue_size=50,
-            workers=4,
-            use_multiprocessing=False)
+            #max_queue_size=50,
+            #workers=4,
+            #use_multiprocessing=True)
+            )
         # clear out garbage
         tf.keras.backend.clear_session()
         
@@ -347,7 +348,7 @@ class audio_generator():
         # count the number of samples in your data set (depending on your disk,
         #                                               this can take some time)
         self.count_samples()
-        # create iterable tf.data.Dataset object => bug error在此
+        # create iterable tf.data.Dataset object 
         self.create_tf_data_obj()
     
     """
@@ -381,7 +382,7 @@ class audio_generator():
                                        tf.TensorShape([self.len_of_samples])),
                         args=None
                         )
-    
+        
     def create_generator(self):
         '''
         Method to create the iterator. 
