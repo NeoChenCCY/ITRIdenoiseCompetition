@@ -30,7 +30,12 @@ class myDTLN_model():
         
         #from keras.models import Sequential        
         
-        self.model = []
+        self.model = tf.keras.models.Sequential([
+                      tf.keras.layers.Flatten(input_shape=(28, 28)),
+                      tf.keras.layers.Dense(128, activation='relu'),
+                      tf.keras.layers.Dropout(0.2),
+                      tf.keras.layers.Dense(10)
+                    ])
         #self.model = Sequential()
         
         # defining default parameters
@@ -226,8 +231,12 @@ class myDTLN_model():
         reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5,
                               patience=3, min_lr=10**(-10), cooldown=1)
         # create callback for early stopping
-        early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, 
-            patience=10, verbose=0, mode='auto', baseline=None)
+        
+        #tf.compat.v1.experimental.output_all_intermediates(True)
+        #tf.config.run_functions_eagerly(True)
+        #early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, 
+         #   patience=10, verbose=0, mode='auto', baseline=None)
+        
         # create model check pointer to save the best model
         checkpointer = ModelCheckpoint(savePath+runName+'.h5',
                                        monitor='val_loss',
@@ -246,15 +255,20 @@ class myDTLN_model():
                                           path_to_train_speech, 
                                           len_in_samples, 
                                           self.fs, train_flag=True)
+        
         dataset = generator_input.tf_data_set
-        dataset = dataset.batch(self.batchsize, drop_remainder=True).repeat()
+        
+        dataset = dataset.batch(self.batchsize, drop_remainder=True)
         # calculate number of training steps in one epoch
         steps_train = generator_input.total_samples//self.batchsize
         # create data generator for validation data
         generator_val = audio_generator(path_to_val_mix,
                                         path_to_val_speech, 
                                         len_in_samples, self.fs)
+        
         dataset_val = generator_val.tf_data_set
+        
+        
         dataset_val = dataset_val.batch(self.batchsize, drop_remainder=True).repeat()
         # calculate number of validation steps
         steps_val = generator_val.total_samples//self.batchsize
@@ -282,26 +296,28 @@ class myDTLN_model():
         
         # Method to compile the model for training #        
         # use the Adam optimizer with a clipnorm of 3
-        optimizerAdam = keras.optimizers.Adam(lr=self.lr, clipnorm=3.0)
+        #optimizerAdam = keras.optimizers.Adam(lr=self.lr, clipnorm=3.0)
+        loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
         # compile model with loss function
-        self.model.compile(optimizer=optimizerAdam, loss=self.lossWrapper())
+        self.model.compile(optimizer='adam', loss=loss_fn, metrics=['accuracy'])
+        #self.model.compile(optimizer=optimizerAdam, loss=self.lossWrapper(), metrics=['accuracy'])
         #return self.model
         #self.model.compile(optimizer=optimizerAdam, loss=tf.keras.losses.BinaryCrossentropy(),metrics=[tf.keras.metrics.BinaryAccuracy(),tf.keras.metrics.FalseNegatives()], run_eagerly=False)
         
         # => 最終BUG在此，RUN第二次就掛掉。因為不明參數太多 #
         self.model.fit(
-            x=dataset, 
-            batch_size=3,
+            x=dataset,
+            batch_size=5,
             #steps_per_epoch=steps_train, 
             epochs=self.max_epochs,
-            #verbose=1,
-            #validation_data=dataset_val,
+            verbose=1,
+            validation_data=dataset_val,
             validation_steps=steps_val, 
             #callbacks=[checkpointer, reduce_lr, csv_logger, early_stopping],
-            #max_queue_size=50,
-            #workers=4,
-            #use_multiprocessing=True)
-            )
+            max_queue_size=50,
+            workers=4,
+            use_multiprocessing=True)
+            #)
         # clear out garbage
         tf.keras.backend.clear_session()
         

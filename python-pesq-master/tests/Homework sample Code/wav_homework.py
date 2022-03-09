@@ -128,6 +128,7 @@ from keras.layers import Dense, Dropout
 from keras.models import Sequential
 import keras.backend as K
 from keras.callbacks import EarlyStopping
+import tensorflow as tf
 
 def rmse(y_true, y_pred):
     return K.sqrt(K.mean(K.square(y_pred - y_true)))
@@ -135,7 +136,15 @@ def rmse(y_true, y_pred):
 # use the GPU with idx 0
 #os.environ["CUDA_VISIBLE_DEVICES"]='1'
 
-model = Sequential()
+#model = Sequential()
+
+model = tf.keras.models.Sequential([
+  tf.keras.layers.Flatten(input_shape=(28, 28)),
+  tf.keras.layers.Dense(128, activation='relu'),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Dense(10)
+])
+
 model.add(Dense(200, input_shape=(w_length,)))
 
 model.add(Dense(200, activation='relu'))
@@ -146,9 +155,12 @@ model.add(Dense(200, activation='relu'))
 
 model.add(Dense(w_shift, activation='linear'))
 
-model.compile(optimizer='adam', loss='mean_squared_error', metrics=[rmse])
 
-earlystopping = EarlyStopping(monitor='val_loss', patience=5)
+loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+#model.compile(optimizer='adam', loss='mean_squared_error', metrics=[rmse])
+model.compile(optimizer='adam', loss=loss_fn, metrics=['accuracy'])
+
+#earlystopping = EarlyStopping(monitor='val_loss', patience=5)
 network_history = model.fit(x_train, y_train, batch_size=32, epochs=5, validation_data=(x_test, y_test), shuffle=True) 
 
 
